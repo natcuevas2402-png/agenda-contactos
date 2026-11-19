@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Agenda de Contactos</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+
+<body>
+
+    <header class="encabezado">
+        <h1>Mi Agenda 💜</h1>
+        <p>Todos tus contactos en un solo lugar</p>
+    </header>
+
+    <main class="contenedor">
+
+        <div class="barra-superior">
+            <h2>Mis contactos</h2>
+            <a href="{{ url_for('agregar') }}" class="boton-agregar">
+                + Agregar contacto
+            </a>
+        </div>
+
+        {% with mensajes = get_flashed_messages() %}
+            {% if mensajes %}
+                {% for mensaje in mensajes %}
+                    <p class="mensaje">{{ mensaje }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if contactos %}
+
+            <section class="lista-contactos">
+
+                {% for contacto in contactos %}
+
+                    <article class="tarjeta-contacto">
+
+                        {% if contacto.foto %}
+                            <img
+                                src="{{ url_for('static', filename='uploads/' + contacto.foto) }}"
+                                alt="Foto de {{ contacto.nombre }}"
+                                class="foto-contacto"
+                            >
+                        {% else %}
+                            <div class="foto-predeterminada">
+                                {{ contacto.nombre[0]|upper }}
+                            </div>
+                        {% endif %}
+
+                        <div class="informacion-contacto">
+                            <h3>{{ contacto.nombre }}</h3>
+
+                            <p>📞 {{ contacto.telefono or 'Sin teléfono' }}</p>
+
+                            <p>✉️ {{ contacto.correo or 'Sin correo' }}</p>
+                        </div>
+
+                        <div class="acciones">
+
+                            <a href="{{ url_for('editar', id=contacto.id) }}"
+                               class="boton-editar">
+                                Editar
+                            </a>
+
+                            <form action="{{ url_for('eliminar', id=contacto.id) }}"
+                                  method="POST"
+                                  onsubmit="return confirm('¿Eliminar este contacto?')">
+
+                                <button type="submit" class="boton-eliminar">
+                                    Eliminar
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </section>
+
+        {% else %}
+
+            <div class="sin-contactos">
+                <h2>¡Tu agenda está vacía! 💗</h2>
+                <p>Agrega tu primer contacto para comenzar.</p>
+            </div>
+
+        {% endif %}
+
+    </main>
+
+    <footer>
+        <p>Mi Agenda de Contactos © 2026</p>
+        <p>Creada con 💜</p>
+    </footer>
+
+</body>
+</html>

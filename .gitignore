@@ -1,0 +1,19 @@
+# Base de datos local
+contactos.db
+*.db
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Entornos virtuales
+venv/
+.venv/
+env/
+
+# Variables privadas
+.env
+
+# Archivos temporales
+*.log
+.DS_Store
